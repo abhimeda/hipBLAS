@@ -9,6 +9,7 @@ trigger:
 pool: gfx1100
 steps:
 - script: |
+      sudo apt --fix-broken install
       ./install.sh -icd
   displayName: 'Installing hipBLAS using install script'
 
