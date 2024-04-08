@@ -15,7 +15,7 @@ steps:
 
 - script: |
       ls
-      cd ./build/release/client/staging
+      cd ./build/release/clients/staging
       ./hipblas-test --gtest_output=xml:hipblas_test_output.xml
   displayName: 'Running hipblas-test'
 - task: PublishTestResults@2
