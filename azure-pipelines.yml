@@ -9,7 +9,7 @@ trigger:
 pool: gfx1100
 steps:
 - script: |
-      echo "rocm" | sudo -S apt --fix-broken install
+      sudo apt -y --fix-broken install
       ./install.sh -icd
   displayName: 'Installing hipBLAS using install script'
 
