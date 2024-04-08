@@ -21,6 +21,6 @@ steps:
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'junit'
-    testResultsFiles: '**/staging-hip/hipblas_test_output.xml' 
+    testResultsFiles: '**/staging/hipblas_test_output.xml' 
   condition: succeededOrFailed()
   displayName: 'Test Results'
