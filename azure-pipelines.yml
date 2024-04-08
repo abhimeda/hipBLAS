@@ -6,7 +6,7 @@
 trigger:
 - develop
 
-pool: NV31
+pool: gfx1100
 steps:
 - script: ./install.sh -icd
   displayName: 'Installing hipBLAS using install script'
