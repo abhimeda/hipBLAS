@@ -1,0 +1,23 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- develop
+
+pool: NV31
+steps:
+- script: ./install.sh -icd
+  displayName: 'Installing hipBLAS using install script'
+
+- script: |
+      cd ./build/release/client/staging
+      ./hipblas-test --gtest_output=xml:hipblas_test_output.xml
+  displayName: 'Running hipblas-test'
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'junit'
+    testResultsFiles: '**/staging-hip/hipblas_test_output.xml' 
+  condition: succeededOrFailed()
+  displayName: 'Test Results'
