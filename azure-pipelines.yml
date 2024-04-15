@@ -1,26 +1,69 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+# # Starter pipeline
+# # Start with a minimal pipeline that you can customize to build and deploy your code.
+# # Add steps that build, run tests, deploy, and more:
+# # https://aka.ms/yaml
+
+# trigger:
+# - develop
+
+# pool: gfx1100
+# steps:
+# - script: |
+#       sudo apt -y --fix-broken install
+#       ./install.sh -c -i -d
+#   displayName: 'Installing hipBLAS using install script'
+
+# - script: |
+#       ls
+#       cd ./build/release/clients/staging
+#       ./hipblas-test --gtest_output=xml:hipblas_test_output.xml
+#   displayName: 'Running hipblas-test'
+# - task: PublishTestResults@2
+#   inputs:
+#     testResultsFormat: 'junit'
+#     testResultsFiles: '**/staging/hipblas_test_output.xml' 
+#   condition: succeededOrFailed()
+#   displayName: 'Test Results'
+
+resources:
+  repositories:
+  - repository: pipelines_repo
+    type: github
+    endpoint: github.com_amd-jmacaran
+    name: amd-jmacaran/pipelines
+  
+
+variables:
+- group: common
 
 trigger:
-- develop
+  batch: true
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - .github
+    - docs
+    - '**/README.md'
+    - '.*'
+    - LICENSE.txt
+    - README.md
 
-pool: gfx1100
-steps:
-- script: |
-      sudo apt -y --fix-broken install
-      ./install.sh -c -i -d
-  displayName: 'Installing hipBLAS using install script'
+pr:
+  autoCancel: true
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - .github
+    - docs
+    - '**/README.md'
+    - '.*'
+    - LICENSE.txt
+    - README.md
+  drafts: false
 
-- script: |
-      ls
-      cd ./build/release/clients/staging
-      ./hipblas-test --gtest_output=xml:hipblas_test_output.xml
-  displayName: 'Running hipblas-test'
-- task: PublishTestResults@2
-  inputs:
-    testResultsFormat: 'junit'
-    testResultsFiles: '**/staging/hipblas_test_output.xml' 
-  condition: succeededOrFailed()
-  displayName: 'Test Results'
+jobs:
+  - template: components/hipBLAS.yml@pipelines_repo
